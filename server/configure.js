@@ -1,0 +1,40 @@
+const path = require('path');
+const express = require('express');
+const exphbs = require('express-handlebars');
+const errhandler = require('errorhandler');
+const cookieParser = require('cookie-parser');
+const methodOverride = require('method-override');
+const routes = require('../routes/routes');
+const morgan = require('morgan');
+const errorHandler = require('errorhandler');
+const exp = require('constants');
+
+
+module.exports = function(app) {
+    app.use(morgan('dev'));
+    app.use(express({
+        uploadDir:path.join(__dirname, 'public/upload/temp')
+        }));
+    app.use(express.urlencoded({extended: true}));
+    app.use(express.json());
+    app.use(methodOverride());
+    app.use(cookieParser('some-secret-value-here'));
+    //Views Setting
+    app.engine('.hbs', exphbs({
+        extname: '.hbs',
+        defaultLayout: 'main',
+        layoutsDir: app.get('views')+'/layouts',
+        partialsDir: [app.get('views')+'/partilas']
+    }))
+    app.set('view engine', '.hbs');
+
+
+    routes(app);
+    app.use('/public/', express.static(path.join(__dirname,'../public')));
+    if('development'=== app.get('env')){
+        app.use(errorHandler())
+    }
+
+    
+    return app;
+};
