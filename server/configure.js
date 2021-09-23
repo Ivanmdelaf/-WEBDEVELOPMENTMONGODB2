@@ -9,6 +9,8 @@ const morgan = require('morgan');
 const errorHandler = require('errorhandler');
 const exp = require('constants');
 
+var moment = require('moment');
+
 
 module.exports = function(app) {
     app.use(morgan('dev'));
@@ -24,7 +26,12 @@ module.exports = function(app) {
         extname: '.hbs',
         defaultLayout: 'main',
         layoutsDir: app.get('views')+'/layouts',
-        partialsDir: [app.get('views')+'/partilas']
+        partialsDir: [app.get('views')+'/partials'],
+        helpers: {
+            timeago: function(timestamp){
+                return moment(timestamp).startOf('minute').fromNow();
+            }
+        }
     }))
     app.set('view engine', '.hbs');
 
