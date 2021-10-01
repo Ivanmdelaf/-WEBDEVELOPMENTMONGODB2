@@ -7,6 +7,8 @@ const methodOverride = require('method-override');
 const routes = require('../routes/routes');
 const morgan = require('morgan');
 const errorHandler = require('errorhandler');
+const bodyParser = require('body-parser');
+const multer = require('multer');
 
 const exp = require('constants');
 
@@ -22,6 +24,9 @@ module.exports = function(app) {
     app.use(express.json());
     app.use(methodOverride());
     app.use(cookieParser('some-secret-value-here'));
+    app.use(multer({ dest: path.join(__dirname,
+        'public/upload/temp')}));
+
     //Views Setting
     app.engine('.hbs', exphbs({
         extname: '.hbs',
@@ -29,7 +34,7 @@ module.exports = function(app) {
         layoutsDir: app.get('views')+'/layouts',
         partialsDir: [app.get('views')+'/partials'],
         helpers: {
-            timeago: function(timestamp){
+            timeago: (timestamp)=>{
                 return moment(timestamp).startOf('minute').fromNow();
             }
         }

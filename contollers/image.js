@@ -1,3 +1,6 @@
+var fs= require('fs');
+var path = require('path');
+
 module.exports = {
     index : (req,res)=>{
         var viewModel = {
@@ -31,8 +34,11 @@ module.exports = {
         res.render('image',viewModel);
     },
     create: (req,res)=>{
-        res.send(req.body)
-        console.log(req.body)
+       var saveImage = ()=>{
+        //to do
+        
+       }
+       saveImage();
     },
     like: (req,res)=>{
 
